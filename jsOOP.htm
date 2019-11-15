@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>jsOOP</title>
+    <script language="javascript" type="text/javascript">
+        function Animal(name, sex, age) {
+            this.name = name;
+            this.sex = sex;
+            this.age = age;
+
+            this.addEventListener = function (name, e) {
+
+                if (name == "shout") {
+                    this.shout = e;
+                }
+                else if (name == "run") {
+                    this.run = e;
+                }
+                else {
+                    alert("没有该事件可添加");
+                }
+            }
+
+            this.startShout = function (animal) {
+                this.shout(animal);
+            }
+        }
+
+        Animal.prototype =
+        {
+            shout: function (animal, arg) {
+            },
+            run: function (animal, speed) {
+            }
+        }
+
+
+
+        //=====================================================
+
+
+        function Mouse(name, sex, age) {
+            this.food = "骨头";
+            Animal.call(this, name, sex, age);
+        }
+        function Cat(name, sex, age) {
+            this.food = "小鱼";
+            Animal.call(this, name, sex, age);
+        }
+
+        //=====================================================
+
+        //Tom and Jerry
+        var mouse;
+        var cat;
+
+        function initMouse() {
+            mouse = new Mouse("Jerry", "雄性", 5);
+            mouse.food = "Tom不让我吃的东西";
+            mouse.addEventListener("shout", mouse_shout);
+        }
+        function mouse_shout(animal) {
+            alert("我是老鼠" + animal.name + "，性别：" + animal.sex + "，今年" + animal.age + "岁" + "，我最爱吃的食物是：" + animal.food);
+        }
+        
+        function initCat() {
+            cat = new Cat("Tom", "雄性", 5);
+            cat.food = "Jerry";
+            cat.addEventListener("shout", cat_shout);
+        }
+        function cat_shout(animal) {
+            alert("我是小猫" + animal.name + "，性别：" + animal.sex + "，今年" + animal.age + "岁" + "，我最爱吃的食物是：" + animal.food);
+        }
+
+    </script>
+</head>
+<body>
+    <input type="button" value="实例化老鼠" onclick="initMouse();" />
+    <input type="button" value="老鼠自我介绍" onclick="mouse.startShout(mouse);" />
+    <br />
+    <input type="button" value="实例化小猫" onclick="initCat();" />
+    <input type="button" value="小猫自我介绍" onclick="cat.startShout(cat);" />
+</body>
+</html>

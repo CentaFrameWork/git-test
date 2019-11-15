@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>画饼图</title>
+    <style>
+        body {
+            margin: 10px;
+        }
+
+        canvas {
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+    </style>
+    <!--[if IE]>
+        <script src="html5.js"></script>
+    <script src="excanvas.js"></script>
+            <![endif]-->
+    <script type="text/javascript" src="yCanvas.js"></script>
+</head>
+<body>
+    <canvas id="pieView" width="900" height="900" style="background-color:lightgray;">不支持canvas标签</canvas>
+    <div id="output" style="width:80px; height:30px; font-size:15px; background-repeat:no-repeat; display:none; background-image:url('bubble.png'); position:absolute; padding:10px;"></div>
+    <script>
+        var pie;
+        var pieArea;
+        var currentIndex = -1;
+
+        var myCanvas = document.getElementById("pieView");
+        var isSuportHtml5 = true;
+        var canvas = myCanvas.getContext('2d');
+        if (!myCanvas.getContext) {
+            isSuportHtml5 = false;
+        }
+
+        window.onload = function () {
+            pie = new yPieChart(isSuportHtml5);
+            pie.anchor("pieView");
+
+            pieArea = new yPieArea(isSuportHtml5);
+            pieArea.left = 100;
+            pieArea.right = 600;
+            pieArea.top = 10;
+            pieArea.bottom = 550;
+
+
+            pieArea.radiusX = 100;
+            pieArea.radiusY = 60;
+            pieArea.outDis = 30;
+            pieArea.is3d = false;
+            pieArea.pie3dHight = 6;
+            //pieArea.pieCenter = { center: false, x: 300, y: 180 };
+            pieArea.pieCenter = { center: true };
+            pieArea.animation = true;
+            pieArea.subClickEnable = true;
+            pieArea.subHighLightEnable = true;
+            pieArea.move = onmove;
+            pieArea.itemClick = onItemClick;
+
+            var pieSeries = new ySeries();
+            pieSeries.dataSource = [
+                { name: '语文', value: 26, color: 'rgb(200,0,0)' },
+                { name: '数学', value: 58, color: 'rgb(22,129,188)' },
+                { name: '英语', value: 34, color: 'rgb(12,200,200)' },
+                { name: '物理', value: 18, color: 'rgb(53,152,20)' },
+                { name: '地理', value: 60, color: 'rgb(190,26,174)' },
+                { name: '化学', value: 80, color: 'rgb(180,147,19)' }
+            ];
+            pieArea.seriesList = pieSeries;
+            pieArea.initPie();
+
+
+
+            //pie.areaList = new Array();
+            //pie.areaList.push(pieArea);
+            pie.areaList = pieArea;
+            pie.drawPie();
+
+            pieArea.appendTitle(pie.targetCanvas, 5, 240, "课程人员");
+            pieArea.appendLegend(pie.targetCanvas, 5, 385, 130, 150);
+
+
+
+
+            //pie.dataSource = [
+            //    { name: '时代', value: 26, color: 'rgb(200,0,0)' },
+            //    { name: '生动', value: 58, color: 'rgb(22,129,188)' },
+            //    { name: '盛大', value: 34, color: 'rgb(12,200,200)' },
+            //    { name: '地方', value: 18, color: 'rgb(53,152,20)' },
+            //    { name: '偶就', value: 60, color: 'rgb(190,26,174)' },
+            //    { name: '为平', value: 80, color: 'rgb(180,147,19)' }
+            //];
+            //pie.titleString = "宿建德江俄方将刚刚普工";
+            //pie.radiusX = 100;
+            //pie.radiusY = 60;
+            //pie.outDis = 30;
+            //pie.is3d = false;
+            //pie.pie3dHight = 5;
+            //pie.pieCenter = { center: false, x: 300, y: 180 };
+            ////pie.pieCenter = { center: true };
+            //pie.chartType = ySeries.chartTypeEnum.pie;
+            //pie.animation = true;
+            //pie.subClickEnable = true;
+            //pie.subHighLightEnable = true;
+            //pie.move = onmove;
+            //pie.itemClick = onItemClick;
+            //pie.draw();
+
+            //pie.appendTitle();
+            //pie.appendLegend(5, 240, 130, 150);
+        };
+
+        function onmove(evt, index) {
+            fillInfo(index);
+            var output = document.getElementById('output');
+            var view = document.getElementById("pieView");
+
+            var point = pie.getPosition(view, evt);
+            output.style.left = (point.x - 8) + "px";
+            output.style.top = (point.y - 50) + "px";
+
+            if (pieArea.selectSub.highlight != index) {
+
+                if (index >= 0) {
+                    var lc = pieArea.lightColor(pieArea.seriesList.dataSource[index].color);
+                    pieArea.highLightColor = lc;
+                    pieArea.selectSub.highlight = index;
+                    view.style.cursor = "pointer";
+                    output.style.display = "block";
+                    pie.drawPie();
+                }
+                else {
+                    pieArea.selectSub.highlight = index;
+                    view.style.cursor = "";
+                    output.style.display = "none";
+                }
+
+            }
+        }
+        function onItemClick(index) {
+            fillInfo(index);
+            if (index != currentIndex) {
+                pieArea.selectSub.out = index;
+                currentIndex = index;
+                pie.drawPie();
+                return;
+            }
+            if (pieArea.selectSub.out >= 0) {
+                pieArea.selectSub.out = -1;
+                pie.drawPie();
+                return;
+            }
+            if (pieArea.selectSub.out < 0) {
+                pieArea.selectSub.out = index;
+                pie.drawPie();
+            }
+        }
+        function fillInfo(index) {
+            var output = document.getElementById('output');
+            if (index >= 0) {
+                output.innerHTML = pieArea.seriesList.dataSource[index].name + ":" + pieArea.seriesList.dataSource[index].value;
+            }
+            else {
+                output.innerHTML = "";
+            }
+        }
+
+    </script>
+</body>
+</html>
