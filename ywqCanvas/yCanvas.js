@@ -1,5 +1,6 @@
 ﻿// JavaScript source code
 function yCommon() {
+    // nsnsnsosnsosnsosnsosnossnsons
     //公用方法
     this.isPointOnLine = function (line, point) {
         var d1 = Math.sqrt(Math.pow(line.point1.x - point.x, 2) + Math.pow(line.point1.y - point.y, 2));
