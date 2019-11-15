@@ -3,6 +3,7 @@ function yCommon() {
     // 这是一个注释123
     // 1111111111
     //  就你就能今年就
+    // nsnsnsosnsosnsosnsosnossnsons
     //公用方法
     this.isPointOnLine = function (line, point) {
         var d1 = Math.sqrt(Math.pow(line.point1.x - point.x, 2) + Math.pow(line.point1.y - point.y, 2));
