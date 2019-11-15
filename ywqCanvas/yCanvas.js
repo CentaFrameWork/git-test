@@ -1,6 +1,6 @@
 ﻿// JavaScript source code
 function yCommon() {
-    // 这是一个注释
+    // 这是一个注释123
     // 1111111111
     //  就你就能今年就
     //公用方法
