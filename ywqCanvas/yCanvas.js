@@ -1,6 +1,6 @@
 ﻿// JavaScript source code
 function yCommon() {
-    // 这是一个注释
+    // 这是一个注释123
     // nsnsnsosnsosnsosnsosnossnsons
     //公用方法
     this.isPointOnLine = function (line, point) {
